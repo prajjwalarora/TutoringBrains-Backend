@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
   },
   phone: {
     type: String,
-    required: [true, "Please specify your phone number!"],
+    // required: [true, "Please specify your phone number!"],
   },
   avatar: {
     type: String,
