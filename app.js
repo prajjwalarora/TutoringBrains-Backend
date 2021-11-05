@@ -10,6 +10,10 @@ const cors = require("cors");
 const compression = require("compression");
 
 const userRouter = require("./routes/userRoutes");
+const assessmentRouter = require("./routes/assessmentRoutes");
+const subjectRouter = require("./routes/subjectRoutes");
+const questionRouter = require("./routes/questionRoutes");
+
 const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
@@ -47,6 +51,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/assessments", assessmentRouter);
+app.use("/api/v1/subjects", subjectRouter);
+app.use("/api/v1/questions/", questionRouter);
 app.use("*", (req, res, next) => {
   res.status("404").json({
     status: "Not Found!",
