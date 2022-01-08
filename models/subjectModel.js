@@ -6,10 +6,10 @@ const subjectSchema = mongoose.Schema(
       type: String,
       required: [true, "A Subject must have a name."],
     },
-    totalQuestions: {
-      type: Number,
-      required: [true, "A Subject must have count of total questions."],
-    },
+    // totalQuestions: {
+    //   type: Number,
+    //   default: 0,
+    // },
     timeDuration: {
       type: Number,
       required: [true, "A Subject must have defined duration (in minutes)."],
@@ -26,6 +26,10 @@ const subjectSchema = mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+subjectSchema.virtual("totalQuestions").get(function () {
+  return this.questions.length;
+});
 
 subjectSchema.pre(/^find/, function (next) {
   this.populate("questions");

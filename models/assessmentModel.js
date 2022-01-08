@@ -31,6 +31,10 @@ const assessmentSchema = mongoose.Schema(
   }
 );
 
+assessmentSchema.virtual("totalSubjects").get(function () {
+  return this.totalSubjects.length;
+});
+
 assessmentSchema.pre(/^find/, function (next) {
   this.populate("author", "-__v -passwordChangedAt").populate("subjects");
   next();

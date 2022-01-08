@@ -7,8 +7,8 @@ router.route("/").post(assessmentController.createAssessment);
 router
   .route("/:id")
   .get(assessmentController.getAssessment)
-  .post()
-  .patch()
+  .post(assessmentController.addAssessmentSubjects)
+  .patch(assessmentController.updateAssessment)
   .delete();
 
 module.exports = router;
