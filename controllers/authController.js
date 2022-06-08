@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
+const filter = require("../utils/filter");
+// const factory = require("./handlerFactory");
 const { promisify } = require("util");
 
 const signToken = (id) => {
@@ -82,6 +84,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
+  console.log(req.headers.authorization);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -91,7 +94,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
-  if (!token) {
+  if (!token || token === "null") {
     if (!req.headers["user-agent"].includes("PostmanRuntime"))
       return res.status(401).json({
         status: "error",
@@ -177,3 +180,28 @@ exports.windowSwitchInfo = async function (req, res, next) {
   console.log("window Switched");
   res.status(200);
 };
+
+exports.verifyDeviceRegisterBody = (req, res, next) => {
+  next();
+};
+
+exports.registerDevice = catchAsync(async (req, res, next) => {
+  const { deviceFingerprint } = req.body;
+  if (!deviceFingerprint || deviceFingerprint.length === 0) {
+    return next(new AppError("device fingerprint missing.", 400));
+  }
+
+  const filteredBody = filter.filterObj(req.body, "deviceFingerprint");
+
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: updatedUser,
+    },
+  });
+});

@@ -3,6 +3,7 @@ const sharp = require("sharp"); // img processing lbry for nodejs
 const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("../utils/appError");
+const filter = require("../utils/filter");
 const factory = require("./handlerFactory");
 
 // const multerStorage = multer.diskStorage({
@@ -46,14 +47,6 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   next();
 });
 
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
-
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
@@ -69,7 +62,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  const filteredBody = filterObj(req.body, "name", "email", "phone");
+  const filteredBody = filter.filterObj(req.body, "name", "email", "phone");
 
   if (req.file) filteredBody.photo = req.file.filename;
 
