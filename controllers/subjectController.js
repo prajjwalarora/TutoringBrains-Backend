@@ -35,7 +35,9 @@ exports.addSubjectQuestion = catchAsync(async (req, res, next) => {
       data[key] = req.body[key];
     }
   });
-  const updatedSubject = await Subject.findByIdAndUpdate(id, data);
+  const updatedSubject = await Subject.findByIdAndUpdate(id, {
+    $push: { questions: { $each: data["questions"] } },
+  });
   res.status(200).json({
     status: "success",
     data: {
