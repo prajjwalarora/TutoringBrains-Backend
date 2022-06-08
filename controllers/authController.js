@@ -84,7 +84,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
-  console.log(req.headers.authorization);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -187,6 +186,7 @@ exports.verifyDeviceRegisterBody = (req, res, next) => {
 
 exports.registerDevice = catchAsync(async (req, res, next) => {
   const { deviceFingerprint } = req.body;
+  console.log(req.body);
   if (!deviceFingerprint || deviceFingerprint.length === 0) {
     return next(new AppError("device fingerprint missing.", 400));
   }
