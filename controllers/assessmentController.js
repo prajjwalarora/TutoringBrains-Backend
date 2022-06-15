@@ -4,13 +4,15 @@ const filter = require("../utils/filter");
 
 exports.createAssessment = catchAsync(async (req, res, next) => {
   const acceptedFields = ["name", "author", "duration", "subjects"];
-  const data = filter(req.body, acceptedFields);
+  const data = filter.filterObj(req.body, acceptedFields);
+  console.log(data);
   const newAssessment = await Assessment.create(data);
   res.status(201).json({
     status: "success",
     data: {
       id: newAssessment.id,
       name: newAssessment.name,
+      duration: newAssessment.duration,
     },
   });
 });
@@ -18,9 +20,16 @@ exports.createAssessment = catchAsync(async (req, res, next) => {
 exports.addAssessmentSubjects = catchAsync(async (req, res, next) => {
   const acceptedFields = ["subjects"];
   const { id } = req.params;
-  const data = filter(req.body, acceptedFields);
-  const updatedAssessment = await Assessment.findByIdAndUpdate(id, data);
-  console.log(updatedAssessment);
+  const keys = Object.keys(req.body);
+  const data = {};
+  keys.forEach((key) => {
+    if (acceptedFields.includes(key)) {
+      data[key] = req.body[key];
+    }
+  });
+  const updatedAssessment = await Assessment.findByIdAndUpdate(id, {
+    $push: { subjects: { $each: data["subjects"] } },
+  });
   res.status(200).json({
     status: "success",
     data: {
@@ -32,21 +41,76 @@ exports.addAssessmentSubjects = catchAsync(async (req, res, next) => {
 exports.getAssessment = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const assessment = await Assessment.findById(id);
+  if (assessment) {
+    res.status(200).json({
+      status: "success",
+      data: {
+        id: assessment._id,
+        name: assessment.name,
+        duration: assessment.duration,
+        author: assessment.author,
+        subjects: assessment.subjects,
+      },
+    });
+  } else {
+    res.status(200).json({
+      status: "success",
+      data: {},
+    });
+  }
+});
+
+exports.getAllAssessment = catchAsync(async (req, res, next) => {
+  const acceptedFields = ["published"];
+  const keys = Object.keys(req.query);
+  const findParam = {};
+  keys.forEach((key) => {
+    if (acceptedFields.includes(key)) {
+      findParam[key] =
+        key === "published"
+          ? req.query[key] === "false"
+            ? false
+            : true
+          : req.query[key];
+    }
+  });
+  const assessment = await Assessment.find(findParam);
   res.status(200).json({
     status: "success",
     data: {
-      id: assessment.id,
-      name: assessment.name,
-      duration: assessment.duration,
-      author: assessment.author,
-      subjects: assessment.subjects,
+      assessment,
     },
   });
 });
+
+exports.getAuthorAssessment = catchAsync(async (req, res, next) => {
+  const acceptedFields = ["published"];
+  const keys = Object.keys(req.query);
+  const findParam = {};
+  keys.forEach((key) => {
+    if (acceptedFields.includes(key)) {
+      findParam[key] =
+        key === "published"
+          ? req.query[key] === "false"
+            ? false
+            : true
+          : req.query[key];
+    }
+  });
+  findParam["author"] = req.user._id;
+  const assessment = await Assessment.find(findParam);
+  res.status(200).json({
+    status: "success",
+    data: {
+      assessment,
+    },
+  });
+});
+
 exports.updateAssessment = catchAsync(async (req, res, next) => {
   const acceptedFields = ["name", "author", "duration", "subjects"];
   const { id } = req.params;
-  const data = filter(req.body, acceptedFields);
+  const data = filter.filterObj(req.body, acceptedFields);
   const updatedAssessment = await Assessment.findByIdAndUpdate(id, data);
   console.log(updatedAssessment);
   res.status(201).json({

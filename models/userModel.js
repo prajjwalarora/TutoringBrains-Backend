@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
   },
+  deviceFingerprint: {
+    type: String,
+    default: "",
+  },
   role: {
     type: String,
     enum: ["student", "instructor", "admin"],
