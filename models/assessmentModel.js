@@ -18,10 +18,21 @@ const assessmentSchema = mongoose.Schema(
       default: 0,
       required: [true, "Duration is required while creating an assessment."],
     },
+    published: {
+      type: Boolean,
+      default: false,
+    },
+    examDate: Date,
     subjects: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Subject",
+      },
+    ],
+    students: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
       },
     ],
   },
@@ -32,7 +43,7 @@ const assessmentSchema = mongoose.Schema(
 );
 
 assessmentSchema.virtual("totalSubjects").get(function () {
-  return this.totalSubjects.length;
+  return this.subjects.length;
 });
 
 assessmentSchema.pre(/^find/, function (next) {

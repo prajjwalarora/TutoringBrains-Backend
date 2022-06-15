@@ -6,11 +6,7 @@ const subjectSchema = mongoose.Schema(
       type: String,
       required: [true, "A Subject must have a name."],
     },
-    // totalQuestions: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    timeDuration: {
+    duration: {
       type: Number,
       required: [true, "A Subject must have defined duration (in minutes)."],
     },

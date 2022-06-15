@@ -15,6 +15,10 @@ exports.createQuestion = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       id: question.id,
+      text: question.text,
+      type: question.type,
+      answers: question.answers,
+      correctAnswer: question.correctAnswer,
     },
   });
 });

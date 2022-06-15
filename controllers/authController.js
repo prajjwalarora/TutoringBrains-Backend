@@ -126,6 +126,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 exports.isLoggedIn = async (req, res, next) => {
+  console.log(req.headers);
   if (req.headers["authorization"]) {
     try {
       const decoded = await promisify(jwt.verify)(

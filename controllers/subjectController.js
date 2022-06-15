@@ -2,12 +2,7 @@ const Subject = require("../models/subjectModel");
 const catchAsync = require("../utils/catchAsync");
 
 exports.createSubject = catchAsync(async (req, res, next) => {
-  const acceptedFields = [
-    "name",
-    "totalQuestions",
-    "timeDuration",
-    "questions",
-  ];
+  const acceptedFields = ["name", "totalQuestions", "duration", "questions"];
   const keys = Object.keys(req.body);
   const data = {};
   keys.forEach((key) => {
@@ -21,6 +16,7 @@ exports.createSubject = catchAsync(async (req, res, next) => {
     data: {
       id: subject.id,
       name: subject.name,
+      duration: subject.duration,
     },
   });
 });
