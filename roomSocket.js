@@ -8,10 +8,22 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     socket.on("join-room", (roomId, userId) => {
       socket.join(roomId);
+      console.log("room joined");
       socket.on("ready", () => {
+        console.log("ready");
         console.log(userId);
         socket.broadcast.to(roomId).emit("user-connected", userId);
       });
+    });
+
+    socket.on("join-screen-share", (roomId, userId) => {
+      socket.join(roomId);
+      console.log("room joined");
+      socket.broadcast.to(roomId).emit("user-connected", userId);
+      // socket.on("ready", () => {
+      //   console.log("ready");
+      //   console.log(userId);
+      // });
     });
 
     socket.on("disconnected", (roomId, user) => {

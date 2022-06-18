@@ -1,11 +1,12 @@
 {
   "name": "tutoringbrains-backend",
   "version": "1.0.0",
-  "description": "Assesment module of TutoringBrains.",
+  "description": "TutoringBrains.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "nodemon server.js"
+    "start:dev": "nodemon server.js NODE_ENV=development",
+    "jobs": "node ./controllers/jobController.js"
   },
   "author": "Prajjwal Arora",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "mongoose": "^6.0.10",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
+    "node-cron": "^3.0.0",
     "peer": "^0.6.1",
     "sharp": "^0.30.4",
     "socket.io": "^4.4.1",
