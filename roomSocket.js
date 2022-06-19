@@ -28,7 +28,7 @@ module.exports = (server) => {
 
     socket.on("disconnected", (roomId, user) => {
       console.log(user);
-      socket.broadcast.to(roomId).emit("disconnected", user);
+      socket.broadcast.to(roomId).emit("user-disconnected", user);
       // socket.di(roomId);
       // socket.on("ready", () => {
       // });

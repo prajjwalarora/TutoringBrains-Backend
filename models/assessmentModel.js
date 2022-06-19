@@ -29,6 +29,12 @@ const assessmentSchema = mongoose.Schema(
         ref: "Subject",
       },
     ],
+    groups: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Group",
+      },
+    ],
     students: [
       {
         type: mongoose.Schema.ObjectId,
@@ -47,7 +53,10 @@ assessmentSchema.virtual("totalSubjects").get(function () {
 });
 
 assessmentSchema.pre(/^find/, function (next) {
-  this.populate("author", "-__v -passwordChangedAt").populate("subjects");
+  this.populate("author", "-__v -passwordChangedAt").populate(
+    "subjects",
+    "groups"
+  );
   next();
 });
 
