@@ -19,6 +19,14 @@ const assessmentSubmissionSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    tabSwitchCount: {
+      type: Number,
+      default: 0,
+    },
+    fullScreenExitFlagCount: {
+      type: Number,
+      default: 0,
+    },
     correctAns: {
       type: Number,
       default: 0,

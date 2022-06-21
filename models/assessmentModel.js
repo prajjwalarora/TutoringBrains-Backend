@@ -62,10 +62,7 @@ assessmentSchema.virtual("duration").get(function () {
 });
 
 assessmentSchema.pre(/^find/, function (next) {
-  this.populate("author", "-__v -passwordChangedAt").populate(
-    "subjects",
-    "groups"
-  );
+  this.populate("author", "-__v -passwordChangedAt").populate("subjects");
   next();
 });
 

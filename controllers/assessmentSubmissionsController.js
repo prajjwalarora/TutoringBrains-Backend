@@ -5,7 +5,13 @@ const catchAsync = require("../utils/catchAsync");
 const filter = require("../utils/filter");
 
 exports.submitResponse = catchAsync(async (req, res, next) => {
-  const acceptedFields = ["assessment", "user", "selectedAnswers"];
+  const acceptedFields = [
+    "assessment",
+    "user",
+    "selectedAnswers",
+    "tabSwitchCount",
+    "fullScreenExitFlagCount",
+  ];
   const data = filter.filterObj(req.body, acceptedFields);
   const newAssessmentSubmissions = await AssessmentSubmissions.create(data);
   res.status(201).json({

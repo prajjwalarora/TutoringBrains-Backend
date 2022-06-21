@@ -41,6 +41,7 @@ exports.addAssessmentSubjects = catchAsync(async (req, res, next) => {
 exports.getAssessment = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const assessment = await Assessment.findById(id);
+  console.log(assessment);
   if (assessment) {
     res.status(200).json({
       status: "success",
