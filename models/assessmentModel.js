@@ -13,10 +13,13 @@ const assessmentSchema = mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "User",
     },
-    duration: {
-      type: Number,
-      default: 0,
-      required: [true, "Duration is required while creating an assessment."],
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    isExpired: {
+      type: Boolean,
+      default: false,
     },
     published: {
       type: Boolean,
@@ -44,6 +47,12 @@ const assessmentSchema = mongoose.Schema(
 
 assessmentSchema.virtual("totalSubjects").get(function () {
   return this.subjects.length;
+});
+
+assessmentSchema.virtual("duration").get(function () {
+  let duration = 0;
+  this.subjects.forEach((sub) => (duration += sub.duration));
+  return duration;
 });
 
 assessmentSchema.pre(/^find/, function (next) {

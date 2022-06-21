@@ -62,11 +62,18 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  const filteredBody = filter.filterObj(req.body, "name", "email", "phone");
+  // const filteredBody = filter.filterObj(
+  //   req.body,
+  //   "name",
+  //   "email",
+  //   "phone",
+  //   "avatar"
+  // );
+  // console.log();
 
   if (req.file) filteredBody.photo = req.file.filename;
 
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -75,6 +82,24 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       user: updatedUser,
+    },
+  });
+});
+
+exports.getStudent = catchAsync(async (req, res, next) => {
+  const acceptedFields = ["email"];
+  const keys = Object.keys(req.query);
+  const findParam = {};
+  keys.forEach((key) => {
+    if (acceptedFields.includes(key)) {
+      findParam[key] = req.query[key];
+    }
+  });
+  const user = await User.findOne(findParam);
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
     },
   });
 });

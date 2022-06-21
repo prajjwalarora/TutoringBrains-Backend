@@ -18,6 +18,7 @@ router.patch(
 );
 router.delete("/deleteMe", userController.deleteMe);
 
+router.get("/student", userController.getStudent);
 // router
 //   .route("/")
 //   .get(userController.getAllUsers)

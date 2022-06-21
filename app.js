@@ -19,9 +19,10 @@ const compression = require("compression");
 
 const userRouter = require("./routes/userRoutes");
 const assessmentRouter = require("./routes/assessmentRoutes");
+const assessmentSubmissionsRouter = require("./routes/assessmentSubmissionsRoutes");
 const subjectRouter = require("./routes/subjectRoutes");
 const questionRouter = require("./routes/questionRoutes");
-const roomRouter = require("./routes/roomRoutes");
+const classRouter = require("./routes/classRoutes");
 const authRouter = require("./routes/authRoutes");
 
 const globalErrorHandler = require("./controllers/errorController");
@@ -67,7 +68,8 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/assessments", assessmentRouter);
 app.use("/api/v1/subjects", subjectRouter);
 app.use("/api/v1/questions", questionRouter);
-app.use("/api/v1/room", roomRouter);
+app.use("/api/v1/assessments-submission", assessmentSubmissionsRouter);
+app.use("/api/v1/classes", classRouter);
 app.use("/api/v1/auth", authRouter);
 // app.use("*", (req, res, next) => {
 //   res.status("404").json({

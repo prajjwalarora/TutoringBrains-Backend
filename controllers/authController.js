@@ -173,7 +173,9 @@ exports.saveuserImage = async function (req, res, next) {
       console.log(err);
     }
   );
-  res.status(200);
+  return res.status(200).json({
+    status: "success",
+  });
 };
 
 exports.windowSwitchInfo = async function (req, res, next) {

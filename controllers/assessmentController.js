@@ -3,7 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 const filter = require("../utils/filter");
 
 exports.createAssessment = catchAsync(async (req, res, next) => {
-  const acceptedFields = ["name", "author", "duration", "subjects"];
+  const acceptedFields = ["name", "author", "examDate", "duration", "subjects"];
   const data = filter.filterObj(req.body, acceptedFields);
   console.log(data);
   const newAssessment = await Assessment.create(data);
@@ -47,6 +47,7 @@ exports.getAssessment = catchAsync(async (req, res, next) => {
       data: {
         id: assessment._id,
         name: assessment.name,
+        published: assessment.published,
         duration: assessment.duration,
         author: assessment.author,
         subjects: assessment.subjects,
@@ -99,6 +100,18 @@ exports.getAuthorAssessment = catchAsync(async (req, res, next) => {
   });
   findParam["author"] = req.user._id;
   const assessment = await Assessment.find(findParam);
+  return res.status(200).json({
+    status: "success",
+    data: {
+      assessment,
+    },
+  });
+});
+
+exports.getStudentAssessment = catchAsync(async (req, res, next) => {
+  const findParam = {};
+  findParam["students"] = req.user._id;
+  const assessment = await Assessment.find(findParam);
   res.status(200).json({
     status: "success",
     data: {
@@ -112,9 +125,27 @@ exports.updateAssessment = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const data = filter.filterObj(req.body, acceptedFields);
   const updatedAssessment = await Assessment.findByIdAndUpdate(id, data);
-  console.log(updatedAssessment);
   res.status(201).json({
     status: "success",
     message: "updated succesfully.",
+  });
+});
+
+exports.publishAssessment = catchAsync(async (req, res, next) => {
+  const acceptedFields = ["published", "students", "group"];
+  const { id } = req.params;
+  const keys = Object.keys(req.body);
+  const data = {};
+  keys.forEach((key) => {
+    if (acceptedFields.includes(key)) {
+      data[key] = req.body[key];
+    }
+  });
+  const updatedAssessment = await Assessment.findByIdAndUpdate(id, data);
+  res.status(200).json({
+    status: "success",
+    data: {
+      id: updatedAssessment.id,
+    },
   });
 });
