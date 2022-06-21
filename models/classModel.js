@@ -12,6 +12,10 @@ const classSchema = mongoose.Schema(
     },
     roomId: String,
     classDate: Date,
+    isExpired: {
+      type: Number,
+      default: false,
+    },
     students: [
       {
         type: mongoose.Schema.ObjectId,
